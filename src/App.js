@@ -9,7 +9,7 @@ const App = () => {
   const [time, setTime] = useState(() => {
     // Load time from localStorage if available, otherwise set it to the default value (7 minutes)
     const storedTime = localStorage.getItem("timerTime");
-    return storedTime ? parseInt(storedTime, 10) : 7 * 1;
+    return storedTime ? parseInt(storedTime, 10) : 7 * 60;
   });
   const [isActive, setIsActive] = useState(() => {
     const storedIsActive = localStorage.getItem("isActive");
@@ -73,7 +73,7 @@ const App = () => {
   ]); // Indexes of the current teams playing
 
   const resetTimer = () => {
-    setTime(7 * 1); // Reset the timer to 7 minutes
+    setTime(7 * 60); // Reset the timer to 7 minutes
     setIsActive(false); // Stop the timer
   };
   const handleTimerEnd = () => {

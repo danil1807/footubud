@@ -29,9 +29,17 @@ const Timer = ({ time, setTime, isActive, setIsActive, onTimerEnd }) => {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
 
+  let timerClassName = "text-8xl font-bold";
+  if (time <= 60) {
+    timerClassName += " text-yellow-500"; // Apply yellow color if 1 minute or less
+  }
+  if (time <= 10) {
+    timerClassName += " text-red-500"; // Apply red color if 10 seconds or less
+  }
+
   return (
     <div className="timer-container flex flex-col items-center">
-      <div className="text-4xl font-bold">
+      <div className={timerClassName}>
         {formatTime(minutes)}:{formatTime(seconds)}
       </div>
       <button
