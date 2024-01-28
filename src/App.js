@@ -30,7 +30,7 @@ const App = () => {
       ? JSON.parse(savedTeamsData)
       : [
           {
-            name: "Orange",
+            name: "Orange 🟠",
             wins: 0,
             draws: 0,
             losses: 0,
@@ -40,7 +40,7 @@ const App = () => {
             points: 0,
           },
           {
-            name: "Black",
+            name: "Black ⚫",
             wins: 0,
             draws: 0,
             losses: 0,
@@ -50,7 +50,7 @@ const App = () => {
             points: 0,
           },
           {
-            name: "White",
+            name: "White ⚪",
             wins: 0,
             draws: 0,
             losses: 0,
@@ -311,7 +311,7 @@ const App = () => {
       localStorage.removeItem("gameHistory");
       setTeamsData([
         {
-          name: "Orange",
+          name: "Orange 🟠",
           wins: 0,
           draws: 0,
           losses: 0,
@@ -321,7 +321,7 @@ const App = () => {
           points: 0,
         },
         {
-          name: "Black",
+          name: "Black ⚫",
           wins: 0,
           draws: 0,
           losses: 0,
@@ -331,7 +331,7 @@ const App = () => {
           points: 0,
         },
         {
-          name: "White",
+          name: "White ⚪",
           wins: 0,
           draws: 0,
           losses: 0,
@@ -365,7 +365,10 @@ const App = () => {
 
       {!isActive ? (
         <h2 className="font-extrabold text-2xl">
-          Next Match {currentTeams[0].name} vs. {currentTeams[1].name}
+          Next Match{" "}
+          <span className="text-xl">
+            {currentTeams[0].name} vs. {currentTeams[1].name}
+          </span>
         </h2>
       ) : (
         <LiveMatch

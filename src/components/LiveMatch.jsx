@@ -57,7 +57,8 @@ const LiveMatch = ({ teams, updateResults, timerEnded }) => {
       <div className="flex flex-box  mt-2">
         <div className="team grow mr-6">
           <p className="text-3xl text-center mb-2">
-            {teams[0].name} - <span className="text-3xl">{team1Score}</span>
+            {teams[0].name} -{" "}
+            <span className="text-3xl font-extrabold">{team1Score}</span>
           </p>
           <div className="flex">
             <button
@@ -76,7 +77,8 @@ const LiveMatch = ({ teams, updateResults, timerEnded }) => {
         </div>
         <div className="team grow">
           <p className="text-3xl text-center mb-2">
-            {teams[1].name} - <span className="text-3xl">{team2Score}</span>
+            {teams[1].name} -{" "}
+            <span className="text-3xl font-extrabold">{team2Score}</span>
           </p>
           <div className="flex">
             <button
