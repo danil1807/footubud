@@ -67,6 +67,26 @@ const App = () => {
     return savedGameHistory ? JSON.parse(savedGameHistory) : [];
   });
 
+  function getRandomNumbers() {
+    const numbers = [0, 1, 2];
+    const selectedNumbers = [];
+
+    // Randomly select the first number
+    const firstIndex = Math.floor(Math.random() * numbers.length);
+    const firstNumber = numbers[firstIndex];
+    selectedNumbers.push(firstNumber);
+
+    // Remove the selected number from the array
+    numbers.splice(firstIndex, 1);
+
+    // Randomly select the second number from the updated array
+    const secondIndex = Math.floor(Math.random() * numbers.length);
+    const secondNumber = numbers[secondIndex];
+    selectedNumbers.push(secondNumber);
+
+    return selectedNumbers;
+  }
+
   const [currentTeams, setCurrentTeams] = useState([
     teamsData[0],
     teamsData[1],
@@ -290,6 +310,10 @@ const App = () => {
     // Save teamsData to localStorage whenever it changes
     localStorage.setItem("teamsData", JSON.stringify(teamsData));
   }, [teamsData]);
+  useEffect(() => {
+    // Save currentTeams to localStorage whenever it changes
+    localStorage.setItem("currentTeams", JSON.stringify(currentTeams));
+  }, [currentTeams]);
 
   useEffect(() => {
     // Save gameHistory to localStorage whenever it changes
@@ -309,6 +333,8 @@ const App = () => {
       // Clear localStorage and reset tournament data
       localStorage.removeItem("teamsData");
       localStorage.removeItem("gameHistory");
+      localStorage.removeItem("currentTeams");
+
       setTeamsData([
         {
           name: "Orange 🟠",
@@ -342,7 +368,12 @@ const App = () => {
         },
       ]);
       setGameHistory([]);
-      setCurrentTeams([teamsData[0], teamsData[1]]);
+      // After clearing localStorage, set currentTeams using getRandomNumbers()
+      const randomNumbers = getRandomNumbers();
+      setCurrentTeams([
+        teamsData[randomNumbers[0]],
+        teamsData[randomNumbers[1]],
+      ]);
       resetTimer();
       setConfirming(false);
     } else {

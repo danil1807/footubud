@@ -30,11 +30,10 @@ const Timer = ({ time, setTime, isActive, setIsActive, onTimerEnd }) => {
   const seconds = time % 60;
 
   let timerClassName = "text-8xl font-bold";
-  if (time <= 60) {
-    timerClassName += " text-yellow-500"; // Apply yellow color if 1 minute or less
-  }
   if (time <= 10) {
     timerClassName += " text-red-500"; // Apply red color if 10 seconds or less
+  } else if (time <= 60) {
+    timerClassName += " text-yellow-500"; // Apply yellow color if 1 minute or less
   }
 
   return (

@@ -52,46 +52,43 @@ const LiveMatch = ({ teams, updateResults, timerEnded }) => {
   }, [timerEnded]);
 
   return (
-    <div className="live-match">
+    <div className="live-match w-full">
       <h2 className="font-extrabold text-2xl">Live Match</h2>
-      <div className="flex flex-box  mt-2">
-        <div className="team grow mr-6">
-          <p className="text-3xl text-center mb-2">
-            {teams[0].name} -{" "}
-            <span className="text-3xl font-extrabold">{team1Score}</span>
-          </p>
-          <div className="flex">
+      <div className="flex flex-box mt-2">
+        <div className="team grow">
+          <p className="text-3xl text-center mb-2">{teams[0].name}</p>
+          <p className="text-3xl font-extrabold text-center">{team1Score}</p>
+          <div className="flex justify-around mt-2">
             <button
-              className="grow text-green-600 border-green-600 rounded-xl mr-2 px-2"
+              className="font-semibold text-green-600 border-green-600 rounded-full py-4 px-3"
               onClick={() => handleGoal(1)}
             >
               Goal
             </button>
             <button
-              className="grow text-red-600 border-red-600 rounded-xl px-2"
+              className="font-semibold text-red-600 border-red-600 rounded-full"
               onClick={() => handleCancelGoal(1)}
             >
-              Cancel Goal
+              Cancel
             </button>
           </div>
         </div>
         <div className="team grow">
-          <p className="text-3xl text-center mb-2">
-            {teams[1].name} -{" "}
-            <span className="text-3xl font-extrabold">{team2Score}</span>
-          </p>
-          <div className="flex">
+          <p className="text-3xl text-center mb-2">{teams[1].name}</p>
+          <p className="text-3xl font-extrabold text-center">{team2Score}</p>
+
+          <div className="flex justify-around mt-2">
             <button
-              className="grow text-green-600 border-green-600 rounded-xl mr-2 px-2"
+              className="font-semibold text-green-600 border-green-600 rounded-full py-4 px-3"
               onClick={() => handleGoal(2)}
             >
               Goal
             </button>
             <button
-              className="grow text-red-600 border-red-600 rounded-xl px-2"
+              className="font-semibold text-red-600 border-red-600 rounded-full"
               onClick={() => handleCancelGoal(2)}
             >
-              Cancel Goal
+              Cancel
             </button>
           </div>
         </div>

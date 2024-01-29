@@ -7,7 +7,8 @@ const GameHistory = ({ history }) => {
       <ol>
         {history.map((game, index) => (
           <li key={index}>
-            {index + 1}. {game.team1} - {game.team2} {game.score}
+            {index + 1}. {game.team1} - {game.team2}{" "}
+            <span className="ml-2">{game.score}</span>
           </li>
         ))}
       </ol>
