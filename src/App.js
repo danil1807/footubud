@@ -3,9 +3,11 @@ import LiveMatch from "./components/LiveMatch";
 import Timer from "./components/Timer";
 import Table from "./components/Table";
 import GameHistory from "./components/GameHistory";
+import { restoreSnapshot } from "./snapshots";
 import "./styles.css"; // Import the Tailwind CSS styles
 
 const App = () => {
+  //TIMER RELATED CODE START
   const [time, setTime] = useState(() => {
     // Load time from localStorage if available, otherwise set it to the default value (7 minutes)
     const storedTime = localStorage.getItem("timerTime");
@@ -15,14 +17,17 @@ const App = () => {
     const storedIsActive = localStorage.getItem("isActive");
     return storedIsActive ? JSON.parse(storedIsActive) : false;
   });
-
+  const resetTimer = () => {
+    setTime(7 * 60); // Reset the timer to 7 minutes
+    setIsActive(false); // Stop the timer
+  };
   useEffect(() => {
     // Save the current time to localStorage whenever it changes
     localStorage.setItem("timerTime", time.toString());
   }, [time]);
+  //TIMER RELATED CODE END
 
-  const [timerEnded, setTimerEnded] = useState(false);
-
+  //TEAMSDATA RELATED CODE START
   const [teamsData, setTeamsData] = useState(() => {
     // Load teamsData from localStorage if available, or use default values
     const savedTeamsData = localStorage.getItem("teamsData");
@@ -36,7 +41,7 @@ const App = () => {
             losses: 0,
             goalsScored: 0,
             goalsConceded: 0,
-            consecutiveGames: 0,
+            history: [], // Initialize an empty history array
             points: 0,
           },
           {
@@ -46,7 +51,7 @@ const App = () => {
             losses: 0,
             goalsScored: 0,
             goalsConceded: 0,
-            consecutiveGames: 0,
+            history: [], // Initialize an empty history array
             points: 0,
           },
           {
@@ -56,17 +61,28 @@ const App = () => {
             losses: 0,
             goalsScored: 0,
             goalsConceded: 0,
-            consecutiveGames: 0,
+            history: [], // Initialize an empty history array
             points: 0,
           },
         ];
   });
+
+  // Initialize currentTeams state with values from localStorage if available
+  const initialCurrentTeams = localStorage.getItem("currentTeams")
+    ? JSON.parse(localStorage.getItem("currentTeams"))
+    : [teamsData[0], teamsData[1]];
+
+  const [currentTeams, setCurrentTeams] = useState(initialCurrentTeams);
+
+  //TEAMSDATA RELATED CODE END
+
   const [gameHistory, setGameHistory] = useState(() => {
     // Load gameHistory from localStorage if available, or use an empty array
     const savedGameHistory = localStorage.getItem("gameHistory");
     return savedGameHistory ? JSON.parse(savedGameHistory) : [];
   });
 
+  //UTILS METHODS START
   function getRandomNumbers() {
     const numbers = [0, 1, 2];
     const selectedNumbers = [];
@@ -86,21 +102,17 @@ const App = () => {
 
     return selectedNumbers;
   }
-
-  const [currentTeams, setCurrentTeams] = useState([
-    teamsData[0],
-    teamsData[1],
-  ]); // Indexes of the current teams playing
-
-  const resetTimer = () => {
-    setTime(7 * 60); // Reset the timer to 7 minutes
-    setIsActive(false); // Stop the timer
+  const clearLocalStorage = () => {
+    // Iterate over all keys in localStorage
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      // Remove the key-value pair from localStorage
+      localStorage.removeItem(key);
+    }
   };
-  const handleTimerEnd = () => {
-    setTimerEnded(true);
-    console.log("set timer end = true");
-  };
+  //UTILS METHODS START
 
+  //UPDATE TEAM RESULTS METHODS START
   const updateResults = (team1Score, team2Score) => {
     const team1Name = currentTeams[0].name;
     const team2Name = currentTeams[1].name;
@@ -149,38 +161,26 @@ const App = () => {
         };
       }
 
-      console.log("Before update:");
-      console.log(
-        updatedTeamsData[team1Index].name +
-          updatedTeamsData[team1Index].consecutiveGames
-      );
-      console.log(
-        updatedTeamsData[team2Index].name +
-          updatedTeamsData[team2Index].consecutiveGames
-      );
-
       // Update other stats
       updatedTeamsData[team1Index] = {
         ...updatedTeamsData[team1Index],
         goalsScored: updatedTeamsData[team1Index].goalsScored + team1Score,
         goalsConceded: updatedTeamsData[team1Index].goalsConceded + team2Score,
-        consecutiveGames: updatedTeamsData[team1Index].consecutiveGames + 1,
+        history: [...updatedTeamsData[team1Index].history, 1], // Append 1 to the history array
       };
       updatedTeamsData[team2Index] = {
         ...updatedTeamsData[team2Index],
         goalsScored: updatedTeamsData[team2Index].goalsScored + team2Score,
         goalsConceded: updatedTeamsData[team2Index].goalsConceded + team1Score,
-        consecutiveGames: updatedTeamsData[team2Index].consecutiveGames + 1,
+        history: [...updatedTeamsData[team2Index].history, 1], // Append 1 to the history array
       };
-      console.log("After update:");
-      console.log(
-        updatedTeamsData[team1Index].name +
-          updatedTeamsData[team1Index].consecutiveGames
-      );
-      console.log(
-        updatedTeamsData[team2Index].name +
-          updatedTeamsData[team2Index].consecutiveGames
-      );
+      // Find the index of the 3rd team
+      const thirdTeamIndex = 3 - team1Index - team2Index;
+      // Update history for the 3rd team by appending '0'
+      updatedTeamsData[thirdTeamIndex] = {
+        ...updatedTeamsData[thirdTeamIndex],
+        history: [...updatedTeamsData[thirdTeamIndex].history, 0], // Append 0 to the history array
+      };
 
       return updatedTeamsData;
     });
@@ -200,36 +200,31 @@ const App = () => {
     resetTimer();
   };
 
+  //UPDATE TEAM RESULTS METHODS END
+
+  // Function to find teams with consecutive games
+  const findTeamsWithConsecutiveGames = (teamsData, consecutiveCount) => {
+    return teamsData.filter((team) => {
+      const lastGames = team.history.slice(-consecutiveCount);
+      const sum = lastGames.reduce((acc, val) => acc + val, 0);
+      return sum === consecutiveCount;
+    });
+  };
   useEffect(() => {
     // Check if any team has consecutiveGames = 3
-    const teamWithThreeConsecutiveGames = teamsData.find(
-      (team) => team.consecutiveGames === 3
+    const teamsWithThreeConsecutiveGames = findTeamsWithConsecutiveGames(
+      teamsData,
+      3
     );
-
-    if (teamWithThreeConsecutiveGames) {
+    if (teamsWithThreeConsecutiveGames[0]) {
       const teamIndex = teamsData.findIndex(
-        (team) => team.name === teamWithThreeConsecutiveGames.name
+        (team) => team.name === teamsWithThreeConsecutiveGames[0].name
       );
       const nextTeamIndex = (teamIndex + 1) % teamsData.length;
       setCurrentTeams([
         teamsData[nextTeamIndex],
         teamsData[(nextTeamIndex + 1) % teamsData.length],
       ]);
-
-      // Reset consecutiveGames for the team with three consecutive games
-      setTeamsData((prevTeamsData) => {
-        const updatedTeamsData = prevTeamsData.map((team) => {
-          if (team.consecutiveGames === 3) {
-            // Update the consecutiveGames property for the team with three consecutive games
-            return {
-              ...team,
-              consecutiveGames: 0,
-            };
-          }
-          return team;
-        });
-        return updatedTeamsData;
-      });
     } else {
       // Check the result of the previous game
       const lastGame = gameHistory[gameHistory.length - 1];
@@ -241,11 +236,16 @@ const App = () => {
             : team2Score > team1Score
             ? lastGame.team2
             : null;
+
+        // Find the next team that is neither the winner nor the loser of the last game
         const nextTeam = teamsData.find(
-          (team) =>
-            !currentTeams.some((currentTeam) => currentTeam.name === team.name)
+          (team) => team.name !== lastGame.team1 && team.name !== lastGame.team2
         );
+
+        console.log(JSON.stringify(winner) + "Winner");
+        console.log(JSON.stringify(lastGame) + "Last game");
         console.log(nextTeam.name + "Next team to enter the field");
+
         if (winner) {
           setCurrentTeams([
             teamsData.find((team) => team.name === winner),
@@ -253,29 +253,24 @@ const App = () => {
           ]);
         } else {
           // If it was a draw, compare consecutiveGames
-          // If it was a draw, compare consecutiveGames
-          const teamWithMinConsecutiveGames = teamsData.reduce(
-            (prev, current) => {
-              if (current.name !== nextTeam.name) {
-                return prev.consecutiveGames < current.consecutiveGames
-                  ? prev
-                  : current;
-              } else {
-                return prev;
-              }
-            }
+          const teamsWithTwoConsecutiveGames = findTeamsWithConsecutiveGames(
+            teamsData,
+            2
+          );
+          if (teamsWithTwoConsecutiveGames[0]) {
+            const benchTeam = teamsWithTwoConsecutiveGames[0];
+            const teamStays = teamsData.filter(
+              (team) =>
+                team.name !== benchTeam.name && team.name !== nextTeam.name
+            );
+            console.log(JSON.stringify(teamStays[0]) + " - Team stays");
+            setCurrentTeams([teamStays[0], nextTeam]);
+          }
+          console.log(
+            JSON.stringify(teamsWithTwoConsecutiveGames) +
+              " - Two consecutive games"
           );
 
-          console.log(
-            teamWithMinConsecutiveGames.name + " Min consecutive games"
-          );
-          if (gameHistory.length === 1) {
-            // Handle the case of the first game being a draw
-            const randomIndex = Math.floor(Math.random() * 2); // Randomly choose one of the two teams
-            setCurrentTeams([currentTeams[randomIndex], nextTeam]);
-          } else {
-            setCurrentTeams([teamWithMinConsecutiveGames, nextTeam]);
-          }
           console.log(
             "Teams after setting current teams - " +
               JSON.stringify(currentTeams)
@@ -283,22 +278,6 @@ const App = () => {
         }
       }
     }
-    const teamToZeroConsecutiveGames = teamsData.find(
-      (team) =>
-        !currentTeams.some((currentTeam) => currentTeam.name === team.name)
-    );
-    setTeamsData((prevTeamsData) => {
-      const updatedTeamsData = prevTeamsData.map((team) => {
-        if (team.name === teamToZeroConsecutiveGames.name) {
-          return {
-            ...team,
-            consecutiveGames: 0,
-          };
-        }
-        return team;
-      });
-      return updatedTeamsData;
-    });
   }, [gameHistory]);
 
   useEffect(() => {
@@ -334,6 +313,7 @@ const App = () => {
       localStorage.removeItem("teamsData");
       localStorage.removeItem("gameHistory");
       localStorage.removeItem("currentTeams");
+      localStorage.removeItem("snapshotList");
 
       setTeamsData([
         {
@@ -344,6 +324,7 @@ const App = () => {
           goalsScored: 0,
           goalsConceded: 0,
           consecutiveGames: 0,
+          history: [], // Initialize an empty history array
           points: 0,
         },
         {
@@ -354,6 +335,7 @@ const App = () => {
           goalsScored: 0,
           goalsConceded: 0,
           consecutiveGames: 0,
+          history: [], // Initialize an empty history array
           points: 0,
         },
         {
@@ -364,6 +346,7 @@ const App = () => {
           goalsScored: 0,
           goalsConceded: 0,
           consecutiveGames: 0,
+          history: [], // Initialize an empty history array
           points: 0,
         },
       ]);
@@ -390,7 +373,6 @@ const App = () => {
           setTime={setTime}
           isActive={isActive}
           setIsActive={setIsActive}
-          onTimerEnd={handleTimerEnd} // Pass the function to handle timer end
         />
       </div>
 
@@ -402,11 +384,7 @@ const App = () => {
           </span>
         </h2>
       ) : (
-        <LiveMatch
-          teams={currentTeams}
-          updateResults={updateResults}
-          timerEnded={timerEnded} // Pass the state indicating timer end
-        />
+        <LiveMatch teams={currentTeams} updateResults={updateResults} />
       )}
 
       <Table teams={teamsData} />
@@ -429,12 +407,21 @@ const App = () => {
           </button>
         </div>
       ) : (
-        <button
-          className="w-2/3 start-btn mt-16 border-orange-300 rounded-lg bg-red-800 text-orange-300 bottom-0"
-          onClick={startNewTournament}
-        >
-          Start New Tournament
-        </button>
+        <div>
+          <button
+            className="w-2/3 start-btn mt-16 border-orange-300 rounded-lg bg-red-800 text-orange-300 bottom-0"
+            onClick={startNewTournament}
+          >
+            Start New Tournament
+          </button>
+          <button
+            className="w-2/3 start-btn mt-16 border-orange-300 rounded-lg bg-red-800 text-orange-300 bottom-0"
+            onClick={() => restoreSnapshot()}
+          >
+            restore
+          </button>
+          <p>{localStorage.getItem("snapshotList")}</p>
+        </div>
       )}
     </div>
   );

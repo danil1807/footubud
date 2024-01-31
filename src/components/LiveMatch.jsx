@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-
-const LiveMatch = ({ teams, updateResults, timerEnded }) => {
+import { makeSnapshot } from "../snapshots";
+const LiveMatch = ({ teams, updateResults }) => {
   const [team1Score, setTeam1Score] = useState(0);
   const [team2Score, setTeam2Score] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
@@ -27,6 +27,7 @@ const LiveMatch = ({ teams, updateResults, timerEnded }) => {
   };
 
   const handleConfirmFinish = () => {
+    makeSnapshot();
     updateResults(team1Score, team2Score); // Pass scores to updateResults
     setShowPopup(false);
     setTeam2Score(0);
@@ -43,13 +44,6 @@ const LiveMatch = ({ teams, updateResults, timerEnded }) => {
     }
     console.log("After cancel finish in Livematch - " + JSON.stringify(teams)); //doesn't show
   };
-
-  useEffect(() => {
-    // Update the state of the popup when the timer ends
-    if (timerEnded) {
-      setShowPopup(true);
-    }
-  }, [timerEnded]);
 
   return (
     <div className="live-match w-full">
