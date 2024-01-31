@@ -241,11 +241,6 @@ const App = () => {
         const nextTeam = teamsData.find(
           (team) => team.name !== lastGame.team1 && team.name !== lastGame.team2
         );
-
-        console.log(JSON.stringify(winner) + "Winner");
-        console.log(JSON.stringify(lastGame) + "Last game");
-        console.log(nextTeam.name + "Next team to enter the field");
-
         if (winner) {
           setCurrentTeams([
             teamsData.find((team) => team.name === winner),
@@ -265,16 +260,21 @@ const App = () => {
             );
             console.log(JSON.stringify(teamStays[0]) + " - Team stays");
             setCurrentTeams([teamStays[0], nextTeam]);
-          }
-          console.log(
-            JSON.stringify(teamsWithTwoConsecutiveGames) +
-              " - Two consecutive games"
-          );
+          } else {
+            //if a draw and it was the first game
+            const teamNamesToRandomlyChooseFrom = [
+              lastGame.team1,
+              lastGame.team2,
+            ];
 
-          console.log(
-            "Teams after setting current teams - " +
-              JSON.stringify(currentTeams)
-          );
+            const teamNameStays =
+              teamNamesToRandomlyChooseFrom[Math.floor(Math.random() * 2)];
+
+            const teamStays = teamsData.filter(
+              (team) => team.name === teamNameStays
+            );
+            setCurrentTeams([teamStays[0], nextTeam]);
+          }
         }
       }
     }
