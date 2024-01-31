@@ -306,6 +306,7 @@ const App = () => {
     localStorage.setItem("isActive", JSON.stringify(isActive));
   }, [isActive]);
   const [confirming, setConfirming] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const startNewTournament = () => {
     if (confirming) {
@@ -378,7 +379,7 @@ const App = () => {
 
       {!isActive ? (
         <h2 className="font-extrabold text-2xl text-center">
-          Next Match <br></br>
+          Next Match <br />
           <span className="text-xl">
             {currentTeams[0].name} vs. {currentTeams[1].name}
           </span>
@@ -406,25 +407,29 @@ const App = () => {
             No
           </button>
         </div>
+      ) : !menuOpen ? (
+        <div>
+          <button onClick={() => setMenuOpen(true)}>Menu</button>
+        </div>
       ) : (
         <div>
+          <button onClick={() => setMenuOpen(false)}>Hide Menu</button>
+          <br />
           <button
-            className="w-2/3 start-btn mt-16 border-orange-300 rounded-lg bg-red-800 text-orange-300 bottom-0"
+            className="w-2/3 start-btn mt-16 border-orange-300 rounded-lg bg-red-400 text-white bottom-0"
+            onClick={() => restoreSnapshot()}
+          >
+            Cancel Last Game
+          </button>
+          <button
+            className="w-2/3 start-btn mt-4 border-orange-300 rounded-lg bg-red-800 text-orange-300 bottom-0"
             onClick={startNewTournament}
           >
             Start New Tournament
           </button>
-          <button
-            className="w-2/3 start-btn mt-16 border-orange-300 rounded-lg bg-red-800 text-orange-300 bottom-0"
-            onClick={() => restoreSnapshot()}
-          >
-            restore
-          </button>
-          <p>{localStorage.getItem("snapshotList")}</p>
         </div>
       )}
     </div>
   );
 };
-
 export default App;
