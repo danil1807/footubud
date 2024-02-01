@@ -54,13 +54,13 @@ const LiveMatch = ({ teams, updateResults }) => {
           <p className="text-3xl font-extrabold text-center">{team1Score}</p>
           <div className="flex justify-around mt-2">
             <button
-              className="font-semibold text-green-600 border-green-600 rounded-full py-4 px-3"
+              className="font-semibold text-green-600 border-green-600 rounded-full py-4 px-3 active:bg-green-400"
               onClick={() => handleGoal(1)}
             >
               Goal
             </button>
             <button
-              className="font-semibold text-red-600 border-red-600 rounded-full"
+              className="font-semibold text-red-600 border-red-600 rounded-full active:bg-red-400"
               onClick={() => handleCancelGoal(1)}
             >
               Cancel
@@ -73,13 +73,13 @@ const LiveMatch = ({ teams, updateResults }) => {
 
           <div className="flex justify-around mt-2">
             <button
-              className="font-semibold text-green-600 border-green-600 rounded-full py-4 px-3"
+              className="font-semibold text-green-600 border-green-600 rounded-full py-4 px-3 active:bg-green-400"
               onClick={() => handleGoal(2)}
             >
               Goal
             </button>
             <button
-              className="font-semibold text-red-600 border-red-600 rounded-full"
+              className="font-semibold text-red-600 border-red-600 rounded-full active:bg-red-400"
               onClick={() => handleCancelGoal(2)}
             >
               Cancel
@@ -98,13 +98,13 @@ const LiveMatch = ({ teams, updateResults }) => {
             <p>Finish game?</p>
             <div className="flex mt-2">
               <button
-                className="grow text-green-600 border-green-600 rounded-xl mr-2 px-2"
+                className="grow text-green-600 border-green-600 rounded-xl mr-2 px-2 active:bg-green-400"
                 onClick={handleConfirmFinish}
               >
                 Finish
               </button>
               <button
-                className="grow text-red-600 border-red-600 rounded-xl px-2"
+                className="grow text-red-600 border-red-600 rounded-xl px-2 active:bg-gray-400"
                 onClick={handleCancelFinish}
               >
                 Cancel

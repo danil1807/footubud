@@ -42,7 +42,7 @@ const Timer = ({ time, setTime, isActive, setIsActive, onTimerEnd }) => {
         {formatTime(minutes)}:{formatTime(seconds)}
       </div>
       <button
-        className="grow text-2xl text-green-600 border-green-600 rounded-xl my-4 mr-2 px-6 py-4"
+        className="grow text-2xl text-green-600 border-green-600 rounded-xl my-4 mr-2 px-6 py-4 active:bg-green-400"
         onClick={toggleTimer}
       >
         {isActive ? "Pause" : "Start"}

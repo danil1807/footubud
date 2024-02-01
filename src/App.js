@@ -369,6 +369,67 @@ const App = () => {
   return (
     <div className="flex flex-col items-center justify-top p-4">
       <div className="w-full">
+        {!menuOpen ? (
+          <div className="absolute top-2 left-2">
+            <button
+              className="text-gray rounded-xl border-gray-600 px-2 active:bg-gray-400"
+              onClick={() => setMenuOpen(true)}
+            >
+              Menu
+            </button>
+          </div>
+        ) : (
+          <div>
+            <button
+              className="text-gray rounded-xl border-gray-600 px-2 active:bg-gray-400"
+              onClick={() => setMenuOpen(false)}
+            >
+              Hide Menu
+            </button>
+            {/* Add other menu buttons here */}
+
+            <div className="flex flex-col items-center bg-white w-full">
+              <button
+                className="w-2/3 start-btn mt-4 border-orange-300 rounded-lg bg-green-500 text-white active:bg-gray-400"
+                onClick={() => window.location.reload()}
+              >
+                Refresh
+              </button>
+              <button
+                className="w-2/3 start-btn mt-4 border-orange-300 rounded-lg bg-red-400 text-white active:bg-gray-400"
+                onClick={() => restoreSnapshot()}
+              >
+                Cancel Last Game
+              </button>
+              <button
+                className="w-2/3 start-btn mt-4 mb-4 border-orange-300 rounded-lg bg-red-800 text-orange-300 active:bg-gray-400"
+                onClick={startNewTournament}
+              >
+                Start New Tournament
+              </button>
+              {/* Conditional rendering for confirmation */}
+              {confirming && (
+                <div className="confirm-container">
+                  <p>Are you sure you want to start a new tournament?</p>
+                  <button
+                    className="confirm-btn w-1/2 rounded-lg active:bg-gray-400"
+                    onClick={startNewTournament}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    className="confirm-btn w-1/2 rounded-lg active:bg-gray-400"
+                    onClick={() => setConfirming(false)}
+                  >
+                    No
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="w-full">
         <Timer
           time={time}
           setTime={setTime}
@@ -390,45 +451,6 @@ const App = () => {
 
       <Table teams={teamsData} />
       <GameHistory history={gameHistory} />
-      {/* Conditional rendering for confirmation */}
-      {confirming ? (
-        <div className="confirm-container">
-          <p>Are you sure you want to start a new tournament?</p>
-          <button
-            className="confirm-btn w-1/2 rounded-lg"
-            onClick={startNewTournament}
-          >
-            Yes
-          </button>
-          <button
-            className="confirm-btn w-1/2 rounded-lg"
-            onClick={() => setConfirming(false)}
-          >
-            No
-          </button>
-        </div>
-      ) : !menuOpen ? (
-        <div>
-          <button onClick={() => setMenuOpen(true)}>Menu</button>
-        </div>
-      ) : (
-        <div>
-          <button onClick={() => setMenuOpen(false)}>Hide Menu</button>
-          <br />
-          <button
-            className="w-2/3 start-btn mt-16 border-orange-300 rounded-lg bg-red-400 text-white bottom-0"
-            onClick={() => restoreSnapshot()}
-          >
-            Cancel Last Game
-          </button>
-          <button
-            className="w-2/3 start-btn mt-4 border-orange-300 rounded-lg bg-red-800 text-orange-300 bottom-0"
-            onClick={startNewTournament}
-          >
-            Start New Tournament
-          </button>
-        </div>
-      )}
     </div>
   );
 };
