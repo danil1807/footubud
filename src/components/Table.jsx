@@ -2,8 +2,24 @@ import React from "react";
 
 const Table = ({ teams }) => {
   // Sort teams by points in descending order
-  const sortedTeams = [...teams].sort((a, b) => b.points - a.points);
+  const sortedTeams = [...teams].sort((a, b) => {
+    if (a.points !== b.points) {
+      return b.points - a.points; // Сравнение по количеству очков
+    } else {
+      const goalDifferenceA = a.goalsScored - a.goalsConceded;
+      const goalDifferenceB = b.goalsScored - b.goalsConceded;
 
+      if (goalDifferenceA !== goalDifferenceB) {
+        return goalDifferenceB - goalDifferenceA; // Сравнение по разнице голов (goalsScored - goalsConceded)
+      } else {
+        if (a.goalsScored !== b.goalsScored) {
+          return b.goalsScored - a.goalsScored; // Сравнение по забитым голам
+        } else {
+          return 0; // Порядок сортировки не меняется
+        }
+      }
+    }
+  });
   return (
     <div className="table-container w-full mt-4">
       <h2 className="font-extrabold text-2xl">Tournament Table</h2>

@@ -205,7 +205,9 @@ const App = () => {
   // Function to find teams with consecutive games
   const findTeamsWithConsecutiveGames = (teamsData, consecutiveCount) => {
     return teamsData.filter((team) => {
-      const lastGames = team.history.slice(-consecutiveCount);
+      const lastGames = team.history
+        ? team.history.slice(-consecutiveCount)
+        : [];
       const sum = lastGames.reduce((acc, val) => acc + val, 0);
       return sum === consecutiveCount;
     });
@@ -278,7 +280,7 @@ const App = () => {
         }
       }
     }
-  }, [gameHistory]);
+  }, [gameHistory, teamsData]);
 
   useEffect(() => {
     // Your existing useEffect logic remains unchanged
@@ -446,7 +448,11 @@ const App = () => {
           </span>
         </h2>
       ) : (
-        <LiveMatch teams={currentTeams} updateResults={updateResults} />
+        <LiveMatch
+          teams={currentTeams}
+          updateResults={updateResults}
+          time={time}
+        />
       )}
 
       <Table teams={teamsData} />

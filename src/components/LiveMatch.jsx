@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { makeSnapshot } from "../snapshots";
-const LiveMatch = ({ teams, updateResults }) => {
+const LiveMatch = ({ teams, updateResults, time }) => {
   const [team1Score, setTeam1Score] = useState(0);
   const [team2Score, setTeam2Score] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
 
+  useEffect(() => {
+    if (time === 0) {
+      setShowPopup(true);
+    }
+  }, [time]);
   const handleGoal = (team) => {
     if (team === 1) {
       setTeam1Score((prevScore) => prevScore + 1);
@@ -18,6 +23,7 @@ const LiveMatch = ({ teams, updateResults }) => {
       }
     }
   };
+
   const handleCancelGoal = (team) => {
     if (team === 1) {
       setTeam1Score((prevScore) => prevScore - 1);
