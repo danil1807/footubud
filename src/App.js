@@ -45,7 +45,7 @@ const App = () => {
             points: 0,
           },
           {
-            name: "Black ⚫",
+            name: "Green 🟢",
             wins: 0,
             draws: 0,
             losses: 0,
@@ -55,7 +55,7 @@ const App = () => {
             points: 0,
           },
           {
-            name: "White ⚪",
+            name: "Blue 🔵",
             wins: 0,
             draws: 0,
             losses: 0,
@@ -331,7 +331,7 @@ const App = () => {
           points: 0,
         },
         {
-          name: "Black ⚫",
+          name: "Green 🟢",
           wins: 0,
           draws: 0,
           losses: 0,
@@ -342,7 +342,7 @@ const App = () => {
           points: 0,
         },
         {
-          name: "White ⚪",
+          name: "Blue 🔵",
           wins: 0,
           draws: 0,
           losses: 0,
