@@ -443,8 +443,34 @@ const App = () => {
       {!isActive ? (
         <h2 className="font-extrabold text-xl text-center">
           Next Match <br />
-          <span className="text-xl">
-            {currentTeams[0].name} vs. {currentTeams[1].name}
+          <span className="text-base">
+            <span
+              className={`${
+                currentTeams[0].name.startsWith("Orange")
+                  ? "text-orange-500"
+                  : currentTeams[0].name.startsWith("Gray")
+                  ? "text-gray-500"
+                  : currentTeams[0].name.startsWith("Purple")
+                  ? "text-purple-500"
+                  : ""
+              }`}
+            >
+              {currentTeams[0].name}
+            </span>{" "}
+            vs.{" "}
+            <span
+              className={`${
+                currentTeams[1].name.startsWith("Orange")
+                  ? "text-orange-500"
+                  : currentTeams[1].name.startsWith("Gray")
+                  ? "text-gray-500"
+                  : currentTeams[1].name.startsWith("Purple")
+                  ? "text-purple-500"
+                  : ""
+              }`}
+            >
+              {currentTeams[1].name}
+            </span>
           </span>
         </h2>
       ) : (

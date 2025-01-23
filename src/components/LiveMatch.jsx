@@ -53,10 +53,12 @@ const LiveMatch = ({ teams, updateResults, time }) => {
 
   return (
     <div className="live-match w-full">
-      <h2 className="font-extrabold text-2xl">Live Match</h2>
       <div className="flex flex-box mt-2">
         <div className="team grow">
-          <p className="text-3xl text-center mb-2">{teams[0].name}</p>
+          <p className="text-3xl text-center mb-2">
+            {" "}
+            {teams[0].name.split(" ").slice(1).join(" ")}
+          </p>
           <p className="text-3xl font-extrabold text-center">{team1Score}</p>
           <div className="flex justify-around mt-2">
             <button
@@ -74,7 +76,10 @@ const LiveMatch = ({ teams, updateResults, time }) => {
           </div>
         </div>
         <div className="team grow">
-          <p className="text-3xl text-center mb-2">{teams[1].name}</p>
+          <p className="text-3xl text-center mb-2">
+            {" "}
+            {teams[1].name.split(" ").slice(1).join(" ")}
+          </p>
           <p className="text-3xl font-extrabold text-center">{team2Score}</p>
 
           <div className="flex justify-around mt-2">
