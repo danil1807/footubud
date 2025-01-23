@@ -35,7 +35,7 @@ const App = () => {
       ? JSON.parse(savedTeamsData)
       : [
           {
-            name: "Orange 🟠",
+            name: "Orange Lions 🦁",
             wins: 0,
             draws: 0,
             losses: 0,
@@ -45,7 +45,7 @@ const App = () => {
             points: 0,
           },
           {
-            name: "White ⚪",
+            name: "Purple Devils 😈",
             wins: 0,
             draws: 0,
             losses: 0,
@@ -55,7 +55,7 @@ const App = () => {
             points: 0,
           },
           {
-            name: "Black ⚫",
+            name: "Gray Wolves 🐺",
             wins: 0,
             draws: 0,
             losses: 0,
@@ -320,7 +320,7 @@ const App = () => {
 
       setTeamsData([
         {
-          name: "Orange 🟠",
+          name: "Orange Lions 🦁",
           wins: 0,
           draws: 0,
           losses: 0,
@@ -331,7 +331,7 @@ const App = () => {
           points: 0,
         },
         {
-          name: "White ⚪",
+          name: "Purple Devils 😈",
           wins: 0,
           draws: 0,
           losses: 0,
@@ -342,7 +342,7 @@ const App = () => {
           points: 0,
         },
         {
-          name: "Black ⚫",
+          name: "Gray Wolves 🐺",
           wins: 0,
           draws: 0,
           losses: 0,
