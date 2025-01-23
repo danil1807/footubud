@@ -441,7 +441,7 @@ const App = () => {
       </div>
 
       {!isActive ? (
-        <h2 className="font-extrabold text-2xl text-center">
+        <h2 className="font-extrabold text-xl text-center">
           Next Match <br />
           <span className="text-xl">
             {currentTeams[0].name} vs. {currentTeams[1].name}
